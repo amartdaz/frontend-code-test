@@ -62,3 +62,46 @@ If you have any questions about the test, you can contact any of us:
 - Julio (juboba@genially.com)
 
 Good Luck!
+
+# Development
+
+This section is used to explain the changes in the code.
+
+**Add and remove boxes.**
+  
+    I have implemented functionality in the buttons we already have in the toolbar. Adding a new box will create a box whose coordinates are diagonally separated by 25px from the previous one. The remove button will remove all selected boxes, or if none are selected, the last box created.
+
+
+**Select a box, which should visually indicate that is selected**
+
+    If a box is selected, the text and its weight change.
+
+
+**Drag the boxes around using interact.js and using React refs. (Keep in mind you should be able to drag a box even if it's not selected when the dragging starts).**
+
+    In the BoxDraggable component, I have added a React ref and the function to drag the component.
+
+
+**Changing a box's color.**
+
+    I have used the button in the toolbar. If there are selected boxes, I change the color of all of them. Otherwise, I change the color of the last box created.
+
+
+**Display a counter indicating how many boxes are selected.**
+
+    I have created two views in the MainStore model. One returns the number of selected boxes, and the other returns the total number of boxes. These values are displayed in the toolbar.
+
+
+**Support selection, dragging and color changing for multiple boxes.**
+
+    Not implemented yet.
+
+
+**Save the state of the app locally and restore it when it loads.**
+
+    I have added a button in the toolbar to save data in localStorage. When creating the store, I check if there is a store item in local storage or create a new one from scratch.
+
+
+**Undo / Redo capabilities**
+
+    Not implemented yet.
