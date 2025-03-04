@@ -16,12 +16,10 @@ const BoxModel = types
       select() {
         self.selected = !self.selected;
       },
-      setLeft(newLeft) {
-        self.left = newLeft
+      changeCoordinates(newLeft, newTop) {
+        self.left = parseInt(newLeft);
+        self.top = parseInt(newTop);
       },
-      setTop(newTop) {
-        self.top = newTop
-      }
     }
   });
 

@@ -1,4 +1,4 @@
-import { types } from "mobx-state-tree";
+import { applySnapshot, types } from "mobx-state-tree";
 import uuid from "uuid/v4";
 import BoxModel from "./models/Box";
 import getRandomColor from "../utils/getRandomColor";
@@ -53,6 +53,9 @@ const box1 = BoxModel.create({
   top: 0
 });
 
-const store = localStorage ? MainStore.create(JSON.parse(localStorage)) : MainStore.create({boxes: [box1], random: true});
+const storeSnapshot = localStorage ? JSON.parse(localStorage) : {boxes: [box1], random: true};
+const store = MainStore.create(storeSnapshot);
+
+applySnapshot(store, storeSnapshot);
 
 export default store;

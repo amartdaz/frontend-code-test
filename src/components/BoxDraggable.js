@@ -1,31 +1,34 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import store from "../stores/MainStore";
 import interact from 'interactjs';
 
 function BoxDraggable(props) {
+  const [isDragging, setIsDragging] = useState(false);
   const draggableRef = useRef(null);
 
   useEffect(() => {
     if(draggableRef.current) {
-        interact(draggableRef.current)
-        .draggable({
-          inertia: true,
-          restrict: {
-            restriction: "parent",
-            endOnly: false,
-            elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-          },
-          autoScroll: true,
-          onmove: dragMoveListener,
-          onstart: function (event) {
-            console.log('Drag start');
-          },
-          onend: function (event) {
-            console.log('Drag end');
-          }
-        });
-      }
+      interact(draggableRef.current)
+      .draggable({
+        inertia: true,
+        restrict: {
+          restriction: "parent",
+          endOnly: false,
+          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
+        },
+        autoScroll: true,
+        onmove: dragMoveListener,
+        onstart: function (event) {
+          console.log('Drag start');
+          setIsDragging(true);
+        },
+        onend: function (event) {
+          console.log('Drag end');
+          props.box.changeCoordinates(event.target.getAttribute('data-x'), event.target.getAttribute('data-y'));
+        }
+      });
+    }
 
     function dragMoveListener(event) {
       var target = event.target;
@@ -41,6 +44,14 @@ function BoxDraggable(props) {
     }
   }, []);
 
+  const handleClick = () => {
+    if(isDragging) {  
+      setIsDragging(false);
+      return;
+    }
+    store.selectBox(props.box.id);
+  }
+
   return (
     <div
       ref={draggableRef}
@@ -54,7 +65,7 @@ function BoxDraggable(props) {
         height: props.height,
         transform: `translate(${props.left}px, ${props.top}px)`
       }}
-      onClick={() => {store.selectBox(props.box.id)}}
+      onClick={handleClick}
     >
       {props.children}
     </div>
