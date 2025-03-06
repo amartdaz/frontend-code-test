@@ -3,12 +3,11 @@ import BoxModel from "../stores/models/Box";
 import uuid from "uuid/v4";
 import getRandomColor from "../utils/getRandomColor";
 import { observer } from "mobx-react";
-import { applySnapshot, onSnapshot } from "mobx-state-tree";
+import { applySnapshot, getSnapshot, onSnapshot } from "mobx-state-tree";
 
 function Toolbar({store}) {
-  const [coordinates, setCoordinates] = useState({top: 25, left: 25});
-  const [ state, setState ] = useState([]);
-  const [ currentFrame, setCurrentFrame ] = useState(-1);
+  const [ state, setState ] = useState([getSnapshot(store)]);
+  const [ currentFrame, setCurrentFrame ] = useState(0);
 
   onSnapshot(store, snapshot => {
     if(currentFrame === state.length - 1) {
@@ -32,18 +31,12 @@ function Toolbar({store}) {
   }
 
   const addBox = () => {
-    // Update coordinates
-    setCoordinates(prev => ({
-      top: prev.top + 25,
-      left: prev.left + 25
-    }));
-
     store.addBox(
       BoxModel.create({
         id: uuid(),
         color: getRandomColor(),
-        left: coordinates.left,
-        top: coordinates.top
+        left: Math.floor(Math.random()*1000),
+        top: Math.floor(Math.random()*575)
       })
     );
   };
@@ -54,8 +47,8 @@ function Toolbar({store}) {
       <button onClick={store.removeBoxes}>Remove Box</button>
       <button onClick={previousState}>Undo</button>
       <button onClick={nextState}>Redo</button>
-      <input type="color" onChange={(event) => store.changeColor(event.target.value)}/>
-      <span>{`Selected: ${store.selectedBoxes}`}</span>
+      <input type="color" disabled={store.selectedBoxesLength <= 0} onChange={(event) => store.changeColor(event.target.value)}/>
+      <span>{`Selected: ${store.selectedBoxesLength}`}</span>
       <span>{`; Total: ${store.countBoxes}`}</span>
     </div>
   );

@@ -28,20 +28,23 @@ const MainStore = types
       },
       changeColor(newColor) {
         const selectedBoxes = self.boxes.filter(box => box.selected);
-        selectedBoxes.length > 0 ? selectedBoxes.forEach(box => {
+        selectedBoxes.length > 0 && selectedBoxes.forEach(box => {
           box.color = newColor;
-        }) : self.boxes.at(-1).color = newColor;
+        });
       }
     };
   })
   .views(self => ({
     get selectedBoxes() {
-      const selected = self.boxes.filter(box => box.selected === true);
+      return self.boxes.filter(box => box.selected);
+    },
+    get selectedBoxesLength() {
+      const selected = self.boxes.filter(box => box.selected);
       return selected.length;
     },
     get countBoxes() {
       return self.boxes.length;
-    }
+    },
 }));
 
 const localStorage = window.localStorage.getItem("store");

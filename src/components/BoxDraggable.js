@@ -12,20 +12,26 @@ function BoxDraggable(props) {
       interact(draggableRef.current)
       .draggable({
         inertia: true,
-        restrict: {
-          restriction: "parent",
-          endOnly: false,
-          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-        },
+        modifiers: [
+          interact.modifiers.restrictRect({
+            restriction: 'parent',
+            endOnly: false,
+          })
+        ],
         autoScroll: true,
-        onmove: dragMoveListener,
-        onstart: function (event) {
-          console.log('Drag start');
-          setIsDragging(true);
+        listeners: {
+          move: dragMoveListener,
+          start () {
+            setIsDragging(true);
+          },
+          end (event) {
+            props.box.changeCoordinates(event.target.getAttribute('data-x'), event.target.getAttribute('data-y'));
+            store.selectedBoxesLength > 0 && store.selectedBoxes.forEach(box => {
+              const element = document.getElementById(box.id);
+              box.changeCoordinates(parseFloat(element.getAttribute('data-x')), parseFloat(element.getAttribute('data-y')));
+            })
+          }
         },
-        onend: function (event) {
-          console.log('Drag end');
-        }
       });
     }
 
@@ -44,13 +50,11 @@ function BoxDraggable(props) {
 
       target.setAttribute('data-x', x);
       target.setAttribute('data-y', y);
-      props.box.changeCoordinates(x, y);
     }
 
     const handleDragSelectedBoxes = (event) => {
-      const selectedBoxes = store.boxes.filter(box => box.selected);
-      if(!selectedBoxes.map(box => box.id).includes(event.target.getAttribute('id'))) return;
-      selectedBoxes.forEach(box => {
+      if(!store.selectedBoxes.map(box => box.id).includes(event.target.getAttribute('id'))) return;
+      store.selectedBoxes.forEach(box => {
         const boxElement = document.getElementById(box.id);
         if (boxElement) {
           var x = (parseFloat(boxElement.getAttribute('data-x')) || 0) + event.dx;
@@ -60,14 +64,12 @@ function BoxDraggable(props) {
             boxElement.style.transform =
               'translate(' + x + 'px, ' + y + 'px)';
 
-          boxElement.setAttribute('data-x', x);
-          boxElement.setAttribute('data-y', y);
-
-          box.changeCoordinates(x, y);
+          boxElement.setAttribute('data-x', x > 1000 ? 1000 : x);
+          boxElement.setAttribute('data-y', y > 575 ? 575 : y);
         }
       })
     }
-  }, []);
+  }, [props]);
 
   const handleClick = () => {
     if(isDragging) {  
