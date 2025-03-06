@@ -52,7 +52,6 @@ function Toolbar({store}) {
     <div className="toolbar">
       <button onClick={addBox}>Add Box</button>
       <button onClick={store.removeBoxes}>Remove Box</button>
-      <button onClick={() => {window.localStorage.setItem('store', JSON.stringify(store))}}>Save locally</button>
       <button onClick={previousState}>Undo</button>
       <button onClick={nextState}>Redo</button>
       <input type="color" onChange={(event) => store.changeColor(event.target.value)}/>
