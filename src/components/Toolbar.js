@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BoxModel from "../stores/models/Box";
 import uuid from "uuid/v4";
 import getRandomColor from "../utils/getRandomColor";
@@ -8,6 +8,12 @@ import { applySnapshot, getSnapshot, onSnapshot } from "mobx-state-tree";
 function Toolbar({store}) {
   const [ state, setState ] = useState([getSnapshot(store)]);
   const [ currentFrame, setCurrentFrame ] = useState(0);
+  
+  useEffect(() => {
+    document.getElementById('colorInput').addEventListener('change', (event) => {
+    store.changeColor(event.target.value)
+  })
+  }, [store]);
 
   onSnapshot(store, snapshot => {
     if(currentFrame === state.length - 1) {
@@ -43,13 +49,19 @@ function Toolbar({store}) {
 
   return (
     <div className="toolbar">
-      <button onClick={addBox}>Add Box</button>
-      <button onClick={store.removeBoxes}>Remove Box</button>
-      <button onClick={previousState}>Undo</button>
-      <button onClick={nextState}>Redo</button>
-      <input type="color" disabled={store.selectedBoxesLength <= 0} onChange={(event) => store.changeColor(event.target.value)}/>
-      <span>{`Selected: ${store.selectedBoxesLength}`}</span>
-      <span>{`; Total: ${store.countBoxes}`}</span>
+      <div className="history">
+        <button onClick={previousState}>Undo</button>
+        <button onClick={nextState}>Redo</button>
+      </div>
+      <div className="information">
+        <span>{`Selected: ${store.selectedBoxesLength}`}</span>
+        <span style={{marginLeft: '5px'}}>{`Total: ${store.countBoxes}`}</span>
+      </div>
+      <div className="actions">
+        <button onClick={addBox}>Add Box</button>
+        <button onClick={store.removeBoxes}>Remove Box</button>
+        <input id='colorInput' type="color" disabled={store.selectedBoxesLength <= 0}/>
+      </div>
     </div>
   );
 }

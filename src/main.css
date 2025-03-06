@@ -30,13 +30,33 @@ html,
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
+  border-radius: 20px;
+}
+
+.selected {
+  -webkit-box-shadow: 10px 10px 16px -4px rgba(0,0,0,0.5);
+  -moz-box-shadow: 10px 10px 16px -4px rgba(0,0,0,0.5);
+  box-shadow: 10px 10px 16px -4px rgba(0,0,0,0.5);
 }
 
 .toolbar {
   position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: center;;
+}
+
+.toolbar div {
+  display: flex;
+  align-items: center;
+}
+
+.toolbar button {
+  height: 30px;
 }
 
 .toolbar span {

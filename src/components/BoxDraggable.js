@@ -64,8 +64,8 @@ function BoxDraggable(props) {
             boxElement.style.transform =
               'translate(' + x + 'px, ' + y + 'px)';
 
-          boxElement.setAttribute('data-x', x > 1000 ? 1000 : x);
-          boxElement.setAttribute('data-y', y > 575 ? 575 : y);
+          boxElement.setAttribute('data-x', x < 0 ? 0 : x > 1000 ? 1000 : x);
+          boxElement.setAttribute('data-y', y < 0 ? 0 : y > 575 ? 575 : y);
         }
       })
     }
@@ -83,7 +83,7 @@ function BoxDraggable(props) {
     <div
       ref={draggableRef}
       id={props.id}
-      className="box"
+      className={"box" + (props.box.selected ? ' selected': '')}
       data-x={props.left}
       data-y={props.top}
       style={{
@@ -91,7 +91,6 @@ function BoxDraggable(props) {
         width: props.width,
         height: props.height,
         transform: `translate(${props.left}px, ${props.top}px)`,
-        userSelect: 'none',
       }}
       onClick={handleClick}
     >

@@ -69,12 +69,12 @@ This section is used to explain the changes in the code.
 
 **Add and remove boxes.**
   
-    I have implemented functionality in the buttons we already have in the toolbar. Adding a new box will create a box whose coordinates are diagonally separated by 25px from the previous one. The remove button will remove all selected boxes, or if none are selected, the last box created.
+    I have implemented functionality in the buttons we already have in the toolbar. Adding a new box will create a box with random coordinates. The remove button will remove all selected boxes, or if none are selected, the last box created.
 
 
 **Select a box, which should visually indicate that is selected**
 
-    If a box is selected, the text and its weight change.
+    You can select and unselect a box clicking on it.
 
 
 **Drag the boxes around using interact.js and using React refs. (Keep in mind you should be able to drag a box even if it's not selected when the dragging starts).**
@@ -84,7 +84,7 @@ This section is used to explain the changes in the code.
 
 **Changing a box's color.**
 
-    I have used the button in the toolbar. If there are selected boxes, I change the color of all of them. Otherwise, I change the color of the last box created.
+    I have used the button in the toolbar. I change the color of all of the selected boxes. If none are selected, the button is disabled.
 
 
 **Display a counter indicating how many boxes are selected.**
@@ -94,14 +94,14 @@ This section is used to explain the changes in the code.
 
 **Support selection, dragging and color changing for multiple boxes.**
 
-    Not implemented yet.
+    It is posible to select different boxes and drag and change the color of all selected boxes.
 
 
 **Save the state of the app locally and restore it when it loads.**
 
-    I have added a button in the toolbar to save data in localStorage. When creating the store, I check if there is a store item in local storage or create a new one from scratch.
+    I use the snapshot feature of the mobx-state-tree library to save the store locally every time a change is made.
 
 
 **Undo / Redo capabilities**
 
-    Not implemented yet.
+    With the snapshot, we can save the different states of the store and navigate between them. I've added two buttons in the toolbar to implement this functionality.

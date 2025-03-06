@@ -5,7 +5,7 @@ import BoxDraggable from "./BoxDraggable";
 function Box(props) {
   return (
     <BoxDraggable {...props}>
-      <p style={{fontWeight: props.box.selected ? '800' : '300'}}>{props.box.selected ? 'Selected Box' : 'Box'}</p>
+      <p style={{fontWeight: props.box.selected ? '500' : '300'}}>Box</p>
     </BoxDraggable>
   );
 }
