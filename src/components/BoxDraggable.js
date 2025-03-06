@@ -25,12 +25,15 @@ function BoxDraggable(props) {
         },
         onend: function (event) {
           console.log('Drag end');
-          props.box.changeCoordinates(event.target.getAttribute('data-x'), event.target.getAttribute('data-y'));
         }
       });
     }
 
     function dragMoveListener(event) {
+      if(store.getSelectedBoxes() > 0) {
+        handleDragSelectedBoxes(event);
+        return;
+      }
       var target = event.target;
       var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
       var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
@@ -41,6 +44,28 @@ function BoxDraggable(props) {
 
       target.setAttribute('data-x', x);
       target.setAttribute('data-y', y);
+      props.box.changeCoordinates(x, y);
+    }
+
+    const handleDragSelectedBoxes = (event) => {
+      const selectedBoxes = store.boxes.filter(box => box.selected);
+      if(!selectedBoxes.map(box => box.id).includes(event.target.getAttribute('id'))) return;
+      selectedBoxes.forEach(box => {
+        const boxElement = document.getElementById(box.id);
+        if (boxElement) {
+          var x = (parseFloat(boxElement.getAttribute('data-x')) || 0) + event.dx;
+          var y = (parseFloat(boxElement.getAttribute('data-y')) || 0) + event.dy;
+
+          boxElement.style.webkitTransform =
+            boxElement.style.transform =
+              'translate(' + x + 'px, ' + y + 'px)';
+
+          boxElement.setAttribute('data-x', x);
+          boxElement.setAttribute('data-y', y);
+
+          box.changeCoordinates(x, y);
+        }
+      })
     }
   }, []);
 
@@ -63,7 +88,8 @@ function BoxDraggable(props) {
         backgroundColor: props.color,
         width: props.width,
         height: props.height,
-        transform: `translate(${props.left}px, ${props.top}px)`
+        transform: `translate(${props.left}px, ${props.top}px)`,
+        userSelect: 'none',
       }}
       onClick={handleClick}
     >
